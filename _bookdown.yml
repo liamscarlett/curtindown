@@ -12,7 +12,7 @@ delete_merged_file: true
 # searches through this folder too. .Rmd files you don't want automatically
 # included, should start with an underscore, e.g. _abstract.Rmd (otherwise 
 # bookdown would merge the abstract into the body text)
-rmd_subdir: ["front-and-back-matter"]
+rmd_subdir: ["sub_directory_name"]
 
 # You can override bookdown's automatic merging of files, and explicitly
 # specify files to include with "rmd_files" like this:

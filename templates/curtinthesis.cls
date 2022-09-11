@@ -12,88 +12,38 @@
 %
 %-------------------------- identification ---------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{templates/ociamthesis}[2015/04/30 Oxford thesis class]
+\ProvidesClass{templates/curtinthesis}[2022/09/11 Curtin thesis class]
 %-------------------------- initial code -----------------------
 
 % JEM: Defaults to one-side, but passing 'twoside' should set everything up for that
-\LoadClass[openright,12pt]{report}
-
-\newif\ifmc@nobind
-\mc@nobindfalse
-
-\DeclareOption{nobind}{\mc@nobindtrue}
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{report}}
-\ProcessOptions\relax
+\LoadClass[openright,12pt]{book}
 
 \setlength{\parskip}{0pt plus 1pt}
 \setlength{\parfillskip}{0pt plus .7\textwidth}
 
-% JEM: Lengths for single spacing (ie separate abstract, captions), front matter (abstract,
-%   acknowledgements, table of contents, etc), and main body text.
-\newlength{\singlebaselineskip}
-\newlength{\frontmatterbaselineskip}
-\newlength{\textbaselineskip}
-% UL 2 Dec 2018: make it possible to customise line and paragraph spacing in separate abstract page
-\newlength{\abstractseparatelineskip}  
-\newlength{\abstractseparateparskip}  
+% 1.5 spacing throughout document
+\renewcommand{\baselinestretch}{1.5}
 
-\setlength{\singlebaselineskip}{\baselineskip}
-\setlength{\frontmatterbaselineskip}{17pt plus1pt minus1pt}
-\setlength{\textbaselineskip}{22pt plus2pt}
-\setlength{\abstractseparatelineskip}{10pt plus1pt minus1pt}
-\setlength{\abstractseparateparskip}{0pt plus 1pt}
-
-
-\newcommand{\submittedtext}{{A thesis submitted for the degree of}}
 \usepackage{varwidth}
-\newcommand{\originalitytext}{%
-   \rule[-2mm]{1pt}{7mm}\hspace{-1pt}%
-   \rule[-2mm]{7mm}{1pt}\hspace{-1pt}%
-   \rule[-2mm]{1pt}{7mm}\hspace{-7mm}%
-   \rule[5mm]{7mm}{1pt}\hspace{1em}%
-   \begin{varwidth}{\textwidth}I hereby certify that this is entirely\\my own work unless otherwise stated.\end{varwidth}}
 
 %
-% DECLARATIONS
+% Page layout
 %
-% These macros are used to declare arguments needed for the
-% construction of the title page and other preamble.
+\usepackage[a4paper,inner=4cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{emptypage}
+\usepackage{fancyhdr}
+\fancyhf{}
+\fancyhead[LO]{{\small\nouppercase\rightmark}}
+\fancyhead[LE]{\small\nouppercase\thepage}
+\fancyhead[RE]{{\small\nouppercase\leftmark}}
+\fancyhead[RO]{{\small\nouppercase\thepage}}
+\setlength{\headheight}{14.5pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrule}{}
+}
+\pagestyle{fancy}
 
-% The year and term the degree will be officially conferred
-\def\degreedate#1{\gdef\@degreedate{#1}}
-% The full (unabbreviated) name of the degree
-\def\degree#1{\gdef\@degree{#1}}
-% The name of your Oxford college (eg Christ Church, Pembroke)
-\def\college#1{\gdef\@college{#1}}
-% Your candidate number (ie for master's submissions)
-\def\candidateno#1{\gdef\@candidateno{#1}}
-% Your word count (for master's submissions)
-\def\wordcount#1{\gdef\@wordcount{#1}}
-\newif\ifmasterssubmission
-% adds candidate number and word count in place of name and college
-\masterssubmissionfalse
-
-
-%
-% Define text area of page and margin offsets
-%
-
-\ifmc@nobind
-\usepackage[includehead,hmargin={3.1cm, 3.1cm}, vmargin={2.5cm,2.7cm}, headsep=.8cm,footskip=1.2cm]{geometry}
-\else
-\usepackage[includehead,hmargin={3.6cm, 2.6cm}, vmargin={2.5cm,2.7cm}, headsep=.8cm,footskip=1.2cm]{geometry}
-\fi
-
-% JEM fix header on cleared pages for openright
-\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
-   \hbox{}
-   \fancyhead[RE,LO]{}
-   \newpage
-   \if@twocolumn\hbox{}\newpage
-   \fi
-   \fancyhead[LO]{\emph{\leftmark}} 
-   \fancyhead[RE]{\emph{\rightmark}} 
-   \fi\fi}
 
 \usepackage{xcolor}
 \usepackage{graphicx} 
@@ -178,50 +128,29 @@
 
 
 %define title page layout
-\newcommand{\university}{University of Oxford}
-\newcommand{\thesistitlesize}{\LARGE}
-\newcommand{\gapbeforecrest}{30mm}
-\newcommand{\gapaftercrest}{25mm}
 
 \renewcommand{\maketitle}{%
 \begin{alwayssingle}\null
-    \renewcommand{\footnotesize}{\small}
-    \renewcommand{\footnoterule}{\relax}
-    \thispagestyle{empty}
-\ifmasterssubmission
-  \begin{center}
-  \vspace*{-3ex}
-    { \thesistitlesize {\bfseries {\@title}} \par}
-{\large \vspace*{\gapbeforecrest} {\crest \par} \vspace*{\gapaftercrest}}
-    {{\Large Candidate no.\ \@candidateno} \par}
-{\large \vspace*{1ex}
-    {Word count: {\@wordcount} \par}
-\vspace*{4ex}
-    {{\submittedtext} \par}
-\vspace*{1ex}
-    {\it {\@degree} \par}
-\vspace*{6ex}
-	{{\originalitytext} \par}
-\vspace*{2ex}
-    {\@degreedate}}
+  \thispagestyle{empty}
+  \begin{center}\vspace*{-0.5cm}
+    {\bf
+    {\fontsize{12}{15}\selectfont \school}
+    \par
+    \vspace{4.78cm}
+    {\fontsize{14}{14}\selectfont \title}
+    \par\ \\\vspace{2.945cm}
+    {\fontsize{12}{12}\selectfont \author}\\[-0.33cm]
+    {\fontsize{10}{12}\selectfont \orcid}
+    \par\vspace{5.95cm}
+    {\fontsize{10}{10}\selectfont \submittedtext \\[-0.1cm]
+      Doctor of Philosophy \\[-0.14cm]
+      of \\[-0.35cm]
+      \university}
+    \par
+    \vspace{2.95cm}
+    {\fontsize{12}{12}\selectfont \submissiondate}\\
+    }
   \end{center}
-\else
-  \begin{center}
-    { \thesistitlesize {\bfseries {\@title}} \par}
-{\large \vspace*{\gapbeforecrest} {\crest \par} \vspace*{\gapaftercrest}}
-    {{\Large \@author} \par}
-{\large \vspace*{1ex}
-    {{\@college} \par}
-\vspace*{1ex}
-    {\university \par}
-\vspace*{20mm}
-    {{\submittedtext} \par}
-\vspace*{1ex}
-    {\it {\@degree} \par}
-\vspace*{2ex}
-    {\@degreedate}}
-  \end{center}
-\fi
   \vfill\null
 \end{alwayssingle}}
 
@@ -251,7 +180,6 @@
 { \begin{alwayssingle}\chapter*{Acknowledgements}
   \thispagestyle{\numberstyleacks}
 	\pagestyle{\numberstyleacks}
-	\setlength{\baselineskip}{\frontmatterbaselineskip}
 }
 {\end{alwayssingle}}
 
@@ -264,53 +192,7 @@
 
 \newcommand{\abstracttitle}{Abstract}
 \newcommand{\numberstyleabstract}{empty}
-\renewenvironment{abstract}%
-{   \begin{alwayssingle}\chapter*{\abstracttitle}
-    \thispagestyle{\numberstyleabstract}
-    \pagestyle{\numberstyleabstract}
-   \setlength{\baselineskip}{\frontmatterbaselineskip}}
-{\end{alwayssingle}}
-
 \newcommand{\abstractsecondtitle}{Resumé}
-\newenvironment{abstractsecond}
-{   \begin{alwayssingle}\chapter*{\abstractsecondtitle}
-    \thispagestyle{\numberstyleabstract}
-    \pagestyle{\numberstyleabstract}
-   \setlength{\baselineskip}{\frontmatterbaselineskip}}
-{\end{alwayssingle}}
-
-
-%The abstractseparate environment is for running of a page with the abstract
-%on including title and author etc as required to be handed in separately
-
-\newenvironment{abstractseparate} {\newgeometry{margin=3.3cm}\thispagestyle{empty}\begin{alwayssingle}
- \begin{center}
-    {\Large \bfseries \@title \par}
-\ifmasterssubmission
-    {{\large \vspace*{3ex} Candidate no.\ \@candidateno} \par}
-\else
-    {{\large \vspace*{2ex} \@author} \par}
-\fi
-{\large \vspace*{1ex}
-\ifmasterssubmission
-    {Thesis word count: {\@wordcount} \par}
-\else
-    {{\@college} \par}
-    {University of Oxford \par}
-\fi
-\vspace*{1ex}
-    {{\it \submittedtext} \par}
-    {\it {\@degree} \par}
-\vspace*{2ex}
-    {\@degreedate} \par}
-\vfill
-  {\Large \bfseries  Abstract}
-  \end{center}
-\vspace{1ex}
-   \setlength{\baselineskip}{\abstractseparatelineskip} %UL was \z@ rather than \abstractseparatelineskip
-   \setlength{\parskip}{\abstractseparateparskip}} %UL add this line so paragraph skip can be customised
-{\vfill\end{alwayssingle}\restoregeometry}
-
 
 %ROMANPAGES
 %
@@ -321,7 +203,7 @@
 % Edited by JEM
 
 \newenvironment{romanpages}
-{\cleardoublepage\setlength{\baselineskip}{\frontmatterbaselineskip}\setcounter{page}{1}\renewcommand{\thepage}{\roman{page}}}
+{\cleardoublepage\setcounter{page}{1}\renewcommand{\thepage}{\roman{page}}}
 {\cleardoublepage\setcounter{page}{1}\renewcommand{\thepage}{\arabic{page}}}
 
 
@@ -341,39 +223,23 @@
 \let\@ldquote=\quote
 \let\@ldendquote=\endquote
 \renewenvironment{quote}
-   {\@ldquote\setlength{\baselineskip}{\singlebaselineskip}}
+   {\@ldquote}
    {\@ldendquote}
 
 \let\@ldqttn=\quotation
 \let\@ldendqttn=\endquotation
 \renewenvironment{quotation}
-   {\@ldqttn\setlength{\baselineskip}{\singlebaselineskip}}
+   {\@ldqttn}
    {\@ldendqttn}
 
 \let\@ldverse=\verse
 \let\@ldendverse=\endverse
 \renewenvironment{verse}
-   {\@ldverse\setlength{\baselineskip}{\singlebaselineskip}}
+   {\@ldverse}
    {\@ldendverse}
 
-% JEM: Stuff for List of Abbreviations (or Glossary or other list)
-\usepackage{calc}
-\newcommand{\t@cfill}{\cleaders\hbox{$\m@th \mkern\@dotsep mu . \mkern\@dotsep mu$}\hfill}
-\newcommand{\abbrl@bel}[1]{\makebox[\labelwidth][l]{\textbf{#1}\ \t@cfill}}
-\newenvironment{mclistof}[2]{%
-   \chapter*{#1}%
-   \addcontentsline{toc}{chapter}{#1}
-   \begin{list}{}%
-   {\renewcommand{\makelabel}{\abbrl@bel}%
-    \setlength{\labelwidth}{#2}%
-    \setlength{\leftmargin}{\labelwidth+\labelsep}%
-    \setlength{\itemsep}{0pt}%
-    \markboth{#1}{#1}%
-   }}
-   {\end{list}\mtcaddchapter}
 
-
-\usepackage[grey,utopia]{quotchap} 
+%\usepackage[grey,utopia]{quotchap} 
 	% To put nice quotes at the beginning of the chapters
 
 \usepackage[nottoc]{tocbibind}
@@ -383,16 +249,16 @@
 \setlength{\textfloatsep}{20pt plus15pt minus4pt}
 
 % JEM: Fix paragraph spacing within quotes for multi-par quotes
-\renewenvironment{savequote}[1][8cm]{%
-\begin{lrbox}{\@quotebox}
-\begin{minipage}[t]{#1}\footnotesize\slshape%
-\setlength{\parskip}{6pt}}{%
-\unskip\end{minipage}\end{lrbox}
-\global\setbox\@quotebox\copy\@quotebox
-\global\let\@printcites\@iprintcites
-\ignorespacesafterend}
-\renewcommand{\qauthor}[1]{\par
-{\raggedleft\upshape #1\qquad\hbox{}\par}\bigskip}
+%\renewenvironment{savequote}[1][8cm]{%
+%\begin{lrbox}{\@quotebox}
+%\begin{minipage}[t]{#1}\footnotesize\slshape%
+%\setlength{\parskip}{6pt}}{%
+%\unskip\end{minipage}\end{lrbox}
+%\global\setbox\@quotebox\copy\@quotebox
+%\global\let\@printcites\@iprintcites
+%\ignorespacesafterend}
+%\renewcommand{\qauthor}[1]{\par
+%{\raggedleft\upshape #1\qquad\hbox{}\par}\bigskip}
 
 % JEM: All of this is so that headers in these sections aren't uppercase
 \let\@ldtoc\tableofcontents
@@ -418,9 +284,6 @@
 \def\longs{{\fontencoding{TS1}\selectfont s}}
 
 % JEM: for highlighting corrections
-\newlength{\mccurrentbaselineskip}
-\newlength{\mccurrentparskip}
-\newlength{\mccurrentparindent}
 \newif\ifcorrections
 \newif\ifm@csection
 \m@csectionfalse
@@ -440,8 +303,8 @@
 
 
 % JEM: adjust start-of-chapter spacing
-\renewcommand{\chapterheadstartvskip}{\vspace*{40pt}}
-\renewcommand{\chapterheadendvskip}{\vspace{30pt}}
+%\renewcommand{\chapterheadstartvskip}{\vspace*{40pt}}
+%\renewcommand{\chapterheadendvskip}{\vspace{30pt}}
 
 
 % JEM: combine all of the commands you run before appendices start

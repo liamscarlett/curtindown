@@ -29,7 +29,7 @@
 
 % As you can see from the uncommented line below, oxforddown template uses the a4paper size, 
 % and passes in the binding option from the YAML header in index.Rmd:
-\documentclass[a4paper, $if(page-layout)$$page-layout$$endif$]{templates/ociamthesis}
+\documentclass[a4paper, $if(page-layout)$$page-layout$$endif$]{templates/curtinthesis}
 
 
 %%%%% ADDING LATEX PACKAGES
@@ -135,25 +135,6 @@ $endfor$
 \makeatother
 
 
-%%%%%%% PAGE HEADERS AND FOOTERS %%%%%%%%%
-\usepackage{fancyhdr}
-\setlength{\headheight}{15pt}
-\fancyhf{} % clear the header and footers
-\pagestyle{fancy}
-\renewcommand{\chaptermark}[1]{\markboth{\thechapter. #1}{\thechapter. #1}}
-\renewcommand{\sectionmark}[1]{\markright{\thesection. #1}} 
-\renewcommand{\headrulewidth}{0pt}
-
-$if(running-header)$
-\fancy$running-header-foot-or-head$[$running-header-position-leftmark$]{\emph{\leftmark}} 
-\fancy$running-header-foot-or-head$[$running-header-position-rightmark$]{\emph{\rightmark}} 
-$endif$
-
-% UL page number position 
-\fancy$ordinary-page-number-foot-or-head$[$ordinary-page-number-position$]{\emph{\thepage}} %regular pages
-\fancypagestyle{plain}{\fancyhf{}\fancy$chapter-page-number-foot-or-head$[$chapter-page-number-position$]{\emph{\thepage}}} %chapter pages
-
-
 %%%%% SELECT YOUR DRAFT OPTIONS
 % This adds a "DRAFT" footer to every normal page.  (The first page of each chapter is not a "normal" page.)
 $if(draft-mark)$
@@ -203,9 +184,6 @@ $if(csl-refs)$
   \let\oldpar\par
   \def\par{\hangindent=\cslhangindent\oldpar}
   \fi
-  % set entry spacing
-  \setlength{\parskip}{$refs-space-between-entries$}
-  \setlength{\baselineskip}{$refs-line-spacing$}
  }%
  {}
 \usepackage{calc}
@@ -248,24 +226,14 @@ $endif$
 
 %%%%% THESIS / TITLE PAGE INFORMATION
 % Everybody needs to complete the following:
-\title{$title$}
-\author{$author$}
-\college{$college$}
-
-% Master's candidates who require the alternate title page (with candidate number and word count)
-% must also un-comment and complete the following three lines:
-$if(masters-submission)$
-\masterssubmissiontrue
-\candidateno{$candidate-number$}
-\wordcount{$word-count$}
-$endif$
-
-% Uncomment the following line if your degree also includes exams (eg most masters):
-%\renewcommand{\submittedtext}{Submitted in partial completion of the}
-% Your full degree name.  (But remember that DPhils aren't "in" anything.  They're just DPhils.)
-\degree{$degree$}
-% Term and year of submission, or date if your board requires (eg most masters)
-\degreedate{$degreedate$}
+\renewcommand\title{$title$}
+\renewcommand\author{$author$}
+\newcommand\school{$school$}
+\newcommand\orcid{$orcid$}%
+\newcommand{\university}{$university$}
+\newcommand{\submittedtext}{$submitted-text$}
+\newcommand\degree{$degree$}
+\newcommand\submissiondate{$submissiondate$}
 
 
 %%%%% YOUR OWN PERSONAL MACROS
@@ -280,42 +248,6 @@ $endif$
 %%%%% THE ACTUAL DOCUMENT STARTS HERE
 \begin{document}
 
-%%%%% CHOOSE YOUR LINE SPACING HERE
-% This is the official option.  Use it for your submission copy and library copy:
-\setlength{\textbaselineskip}{$linespacing$}
-% This is closer spacing (about 1.5-spaced) that you might prefer for your personal copies:
-%\setlength{\textbaselineskip}{18pt plus2pt minus1pt}
-
-% You can set the spacing here for the roman-numbered pages (acknowledgements, table of contents, etc.)
-\setlength{\frontmatterbaselineskip}{$frontmatter-linespacing$}
-
-% UL: You can set the line and paragraph spacing here for the separate abstract page to be handed in to Examination schools
-\setlength{\abstractseparatelineskip}{13pt plus1pt minus1pt}
-\setlength{\abstractseparateparskip}{0pt plus 1pt}
-
-% UL: You can set the general paragraph spacing here - I've set it to 2pt (was 0) so
-% it's less claustrophobic
-\setlength{\parskip}{2pt plus 1pt}
-
-%
-% Customise title page
-%
-$if(university-logo)$
-\def\crest{{\includegraphics[width=$university-logo-width$]{$university-logo$}}}
-$else$
-\def\crest{}
-$endif$
-\renewcommand{\university}{$university$}
-\renewcommand{\submittedtext}{$submitted-text$}
-\renewcommand{\thesistitlesize}{\fontsize{$title-size$}{$title-size-linespacing$}\selectfont}
-\renewcommand{\gapbeforecrest}{$gap-before-crest$}
-\renewcommand{\gapaftercrest}{$gap-after-crest$}
-
-
-% Leave this line alone; it gets things started for the real document.
-\setlength{\baselineskip}{\textbaselineskip}
-
-
 %%%%% CHOOSE YOUR SECTION NUMBERING DEPTH HERE
 % You have two choices.  First, how far down are sections numbered?  (Below that, they're named but
 % don't get numbers.)  Second, what level of section appears in the table of contents?  These don't have
@@ -326,16 +258,6 @@ $endif$
 \setcounter{secnumdepth}{$section-numbering-depth$}
 % The level that shows up in the ToC:
 \setcounter{tocdepth}{$toc-depth$}
-
-
-%%%%% ABSTRACT SEPARATE
-% This is used to create the separate, one-page abstract that you are required to hand into the Exam
-% Schools.  You can comment it out to generate a PDF for printing or whatnot.
-$if(abstractseparate)$
-\begin{abstractseparate}
-  $abstract$
-\end{abstractseparate}
-$endif$
 
 % JEM: Pages are roman numbered from here, though page numbers are invisible until ToC.  This is in
 % keeping with most typesetting conventions.
@@ -355,50 +277,83 @@ $if(dedication)$
 \end{dedication}
 $endif$
 
-%%%%% ACKNOWLEDGEMENTS
-$if(acknowledgements)$
-
-$if(show-acknowledgements-in-toc)$
-\addcontentsline{toc}{chapter}{Acknowledgements}
-\renewcommand{\numberstyleacks}{plain}
-\renewcommand{\numberstyleabstract}{plain}
+$if(show-frontmatter-in-toc)$
+  \addcontentsline{toc}{chapter}{Frontmatter}
 $endif$
 
-\begin{acknowledgements}
- 	$acknowledgements$
-\end{acknowledgements}
-
+%%%%% DECLARATION
+$if(declaration-file)$
+  $if(show-declaration-in-toc)$
+    \addcontentsline{toc}{section}{$declaration-heading$}
+  $endif$
+  \chapter*{$declaration-heading$}
+  \input{$declaration-file$}
 $endif$
-
 
 %%%%% ABSTRACT
-$if(abstract)$
-
-$if(show-abstract-in-toc)$
-\addcontentsline{toc}{chapter}{$abstract-heading$}
-\renewcommand{\numberstyleabstract}{plain}
+$if(abstract-file)$
+  $if(show-abstract-in-toc)$
+    \addcontentsline{toc}{section}{$abstract-heading$}
+  $endif$
+  \chapter*{$abstract-heading$}
+  \input{$abstract-file$}
 $endif$
 
-\renewcommand{\abstracttitle}{$abstract-heading$}
-\begin{abstract}
-	$abstract$
-\end{abstract}
-
+%%%%% SECOND ABSTRACT
+$if(second-abstract-file)$
+  $if(show-second-abstract-in-toc)$
+    \addcontentsline{toc}{section}{$second-abstract-heading$}
+  $endif$
+  \chapter*{$second-abstract-heading$}
+  \input{$second-abstract-file$}
 $endif$
 
-$if(abstract-second)$
-
-$if(show-abstract-in-toc)$
-\addcontentsline{toc}{chapter}{$abstract-second-heading$}
-\renewcommand{\numberstyleabstract}{plain}
+%%%%% ACKNOWLEDGEMENTS
+$if(acknowledgements-file)$
+  $if(show-acknowledgements-in-toc)$
+    \addcontentsline{toc}{section}{$acknowledgements-heading$}
+  $endif$
+  \chapter*{$acknowledgements-heading$}
+  \input{$acknowledgements-file$}
 $endif$
 
-\renewcommand{\abstractsecondtitle}{$abstract-second-heading$}
-\begin{abstractsecond}
-	$abstract-second$
-\end{abstractsecond}
-
+%%%%% ACKNOWLEDGEMENT OF COUNTRY
+$if(acknowledgement-of-country-file)$
+  $if(show-acknowledgement-of-country-in-toc)$
+    \addcontentsline{toc}{section}{$acknowledgement-of-country-heading$}
+  $endif$
+  \chapter*{$acknowledgement-of-country-heading$}
+  \input{$acknowledgement-of-country-file$}
 $endif$
+
+%%%%% LIST OF PUBLICATIONS
+$if(list-of-publications-file)$
+  $if(show-list-of-publications-in-toc)$
+    \addcontentsline{toc}{section}{$list-of-publications-heading$}
+  $endif$
+  \chapter*{$list-of-publications-heading$}
+  \input{$list-of-publications-file$}
+$endif$
+
+%%%%% LIST OF CONFERENCES
+$if(list-of-conferences-file)$
+  $if(show-list-of-conferences-in-toc)$
+    \addcontentsline{toc}{section}{$list-of-conferences-heading$}
+  $endif$
+  \chapter*{$list-of-conferences-heading$}
+  \input{$list-of-conferences-file$}
+$endif$
+
+%%%%% STATEMENT OF CONTRIBUTIONS
+$if(statement-of-contributions-file)$
+  $if(show-statement-of-contributions-in-toc)$
+    \addcontentsline{toc}{section}{$statement-of-contributions-heading$}
+  $endif$
+  \chapter*{$statement-of-contributions-heading$}
+  \input{$statement-of-contributions-file$}
+$endif$
+
+
 
 %%%%% MINI TABLES
 % This lays the groundwork for per-chapter, mini tables of contents.  Comment the following line
@@ -418,33 +373,34 @@ $endif$
 \flushbottom
 
 % This is where the whole-document ToC appears:
+\addcontentsline{toc}{section}{Contents}
 \tableofcontents
 
 $if(lof)$
-\listoffigures
-	\mtcaddchapter
-  	% \mtcaddchapter is needed when adding a non-chapter (but chapter-like) entity to avoid confusing minitoc
+\addcontentsline{toc}{section}{List of Figures}
+\makeatletter
+\@starttoc{lof}
+\makeatother
+% \mtcaddchapter is needed when adding a non-chapter (but chapter-like) entity to avoid confusing minitoc
 $endif$
 
 % Uncomment to generate a list of tables:
 $if(lot)$
-\listoftables
-  \mtcaddchapter
+\addcontentsline{toc}{section}{List of Tables}
+\makeatletter
+\@starttoc{lot}
+\makeatother
 $endif$
+
 %%%%% LIST OF ABBREVIATIONS
-% This example includes a list of abbreviations.  Look at text/abbreviations.tex to see how that file is
-% formatted.  The template can handle any kind of list though, so this might be a good place for a
-% glossary, etc.
-$if(abbreviations)$
-% First parameter can be changed eg to "Glossary" or something.
-% Second parameter is the max length of bold terms.
-\begin{mclistof}{$abbreviations-heading$}{$abbreviations-width$}
-
-$abbreviations$
-
-\end{mclistof} 
-
+$if(abbreviations-file)$
+  $if(show-abbreviations-in-toc)$
+    \addcontentsline{toc}{section}{$abbreviations-heading$}
+  $endif$
+  \chapter*{$abbreviations-heading$}
+  \input{$abbreviations-file$}
 $endif$
+
 
 % The Roman pages, like the Roman Empire, must come to its inevitable close.
 \end{romanpages}
@@ -458,15 +414,15 @@ $body$
 
 %%%%% REFERENCES
 $if(use-biblatex)$
-\setlength{\baselineskip}{0pt} % JEM: Single-space References
-
-% we are setting the title for the references section in front-and-back-matter/99-references_heading.Rmd
 {\renewcommand*\MakeUppercase[1]{#1}%
+\addcontentsline{toc}{chapter}{Bibliography}
+\chapter*{Bibliography}
 \printbibliography[heading=none]}
-
 $endif$
 
 $if(use-natbib)$
+\addcontentsline{toc}{chapter}{Bibliography}
+\chapter*[Bibliography}
 \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
 $endif$
 

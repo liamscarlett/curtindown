@@ -16,29 +16,68 @@ knit: (function(input, ...) {
 #####################
 ## thesis metadata ##
 #####################
-title: |
-  `oxforddown`: \
-  An Oxford University Thesis \
-  Template for R Markdown
+title: Thesis Title
 author: Author Name
-college: Your College
-university: University of Oxford
-university-logo: templates/beltcrest.pdf
-university-logo-width: 5cm
-submitted-text: A thesis submitted for the degree of
+orcid: 0000-0000-0000-0000
+university: Curtin University
+school: Your School
+submitted-text: This thesis is presented for the Degree of
 degree: Doctor of Philosophy
-degreedate: Michaelmas 2018
-dedication: For Yihui Xie
-acknowledgements: |
-  `r paste(readLines("front-and-back-matter/_acknowledgements.Rmd"), collapse = '\n  ')`
-show-acknowledgements-in-toc: false
-abstract-heading: "Abstract"
-abstract: |
-  `r paste(readLines("front-and-back-matter/_abstract.Rmd"), collapse = "\n  ")`
+submissiondate: \today
+#dedication: Dedication text
+
+#####################
+## FRONTMATTER ##
+#####################
+
+show-frontmatter-in-toc: true
+
+#Comment out any of the below blocks to remove them from the thesis
+
+#Path to declaration file (without the .tex extension)
+declaration-file: frontmatter/declaration
+show-declaration-in-toc: true
+declaration-heading: "Declaration"
+
+#Path to abstract file (without the .tex extension)
+abstract-file: frontmatter/abstract
 show-abstract-in-toc: false
-# add a second abstract with abstract-second-heading: "Abstract two", and abstract-second: "My abstract"
-abbreviations: |
-  `r paste(readLines("front-and-back-matter/_abbreviations.Rmd"), collapse = '\n  ')`
+abstract-heading: "Abstract"
+
+#Path to second abstract file (without the .tex extension)
+second-abstract-file: frontmatter/second-abstract
+show-second-abstract-in-toc: false
+second-abstract-heading: "Resumen"
+
+#Path to acknowledgements file (without the .tex extension)
+acknowledgements-file: frontmatter/acknowledgements
+show-acknowledgements-in-toc: true
+acknowledgements-heading: "Acknowledgements"
+
+#Path to acknowledgement of country file (without the .tex extension)
+acknowledgement-of-country-file: frontmatter/acknowledgement-of-country
+show-acknowledgement-of-country-in-toc: true
+acknowledgement-of-country-heading: "Acknowledgement of Country"
+
+#Path to list of publications file (without the .tex extension)
+list-of-publications-file: frontmatter/list-of-publications
+show-list-of-publications-in-toc: true
+list-of-publications-heading: "List of Publications"
+
+#Path to list of conferences file (without the .tex extension)
+list-of-conferences-file: frontmatter/list-of-conferences
+show-list-of-conferences-in-toc: true
+list-of-conferences-heading: "Conference Presentations"
+
+#Path to statement of contributions file (without the .tex extension)
+statement-of-contributions-file: frontmatter/statement-of-contributions
+show-statement-of-contributions-in-toc: true
+statement-of-contributions-heading: "Statement of Contribution of Others"
+
+#Path to list of abbreviations file (without the .tex extension)
+abbreviations-file: frontmatter/abbreviations
+show-abbreviations-in-toc: true
+abbreviations-heading: "List of Abbreviations"
 
 #######################
 ## bibliography path ##
@@ -48,20 +87,6 @@ bibliography: [bibliography/references.bib, bibliography/additional-references.b
 ########################
 ## PDF layout options ###
 #########################
-### submitting a master's thesis ###
-# set masters-submission: true for an alternative, anonymous title page with 
-# candidate number and word count
-masters-submission: false
-candidate-number: 123456
-word-count: "10,052"
-
-# if you want to use a different title page altogether, provide a path to a 
-# .tex file here and it will override the default Oxford one
-# alternative-title-page: templates/alt-title-page-example.tex
-
-### abbreviations ###
-abbreviations-width: 3.2cm
-abbreviations-heading: List of Abbreviations
 
 
 ### citation and bibliography style ###
@@ -77,8 +102,8 @@ refs-line-spacing: 6mm
 refs-space-between-entries: 1mm
 
 ## biblatex options ##
-#use-biblatex: true # set to true, and set "output:bookdown::pdf_book: citation_package: biblatex"
-#bib-latex-options: "style=authoryear, sorting=nyt, backend=biber, maxcitenames=2, useprefix, doi=true, isbn=false, uniquename=false" #for science, you might want style=numeric-comp, sorting=none for numerical in-text citation with references in order of appearance
+use-biblatex: true # set to true, and set "output:bookdown::pdf_book: citation_package: biblatex"
+bib-latex-options: "style=authoryear, sorting=nyt, backend=biber, maxcitenames=2, useprefix, doi=true, isbn=false, uniquename=false" #for science, you might want style=numeric-comp, sorting=none for numerical in-text citation with references in order of appearance
 
 ## natbib options ##
 #use-natbib: true # set to true, and set "output:bookdown::pdf_book: citation_package: natbib"
@@ -133,7 +158,7 @@ section-numbering-depth: 2 # to which depth should headings be numbered?
 toc-depth: 1 # to which depth should headings be included in table of contents?
 lof: true # include list of figures in front matter?
 lot: true # include list of tables in front matter?
-mini-toc: true  # include mini-table of contents at start of each chapter? (this just prepares it; you must also add \minitoc after the chapter titles)
+mini-toc: false  # include mini-table of contents at start of each chapter? (this just prepares it; you must also add \minitoc after the chapter titles)
 mini-lot: false  # include mini-list of tables by start of each chapter?
 mini-lof: false  # include mini-list of figures by start of each chapter?
 
@@ -204,6 +229,3 @@ This will include code to create additional chunk options (e.g. for adding autho
 If you need to create your own additional chunk options, edit the file scripts/create_chunk_options.R
 -->
 
-<!-- This chunk includes the front page content in HTML output -->
-```{r ebook-welcome, child = 'front-and-back-matter/_welcome-ebook.Rmd', eval=knitr::is_html_output()}
-```
